@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     padding: spacing.l,
     gap: spacing.s,
     margin: -2,
+    width: 130,
   },
   label: { color: colors.white, fontSize: typography.m },
   dropdownContainer: {
