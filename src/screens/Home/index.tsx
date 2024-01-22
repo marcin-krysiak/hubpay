@@ -1,3 +1,4 @@
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -58,37 +59,39 @@ export default function Home() {
   );
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: spacing.xl,
-        gap: spacing.m,
-      }}
-    >
-      <CurrencyInput
-        label="You send exactly"
-        selectedCurrency={BASE_CURRENCY}
-        value={sendValue}
-        onChangeText={onSendMoneyChange}
-      />
-      <FeesAccordion
-        baseCurrency={BASE_CURRENCY}
-        selectedCurrency={selectedCurrency}
-        conversionRate={conversionRate}
-      />
-      <CurrencyInput
-        label="Recipient gets"
-        selectedCurrency={selectedCurrency}
-        currencies={currencies}
-        onSelectCurrency={onCurrencyChange}
-        value={receiptValue}
-        onChangeText={onReceiptMoneyChange}
-      />
-      <ProcessingTime />
-      <Button title="Start transfer" />
-    </SafeAreaView>
+    <ActionSheetProvider>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "#fff",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: spacing.xl,
+          gap: spacing.m,
+        }}
+      >
+        <CurrencyInput
+          label="You send exactly"
+          selectedCurrency={BASE_CURRENCY}
+          value={sendValue}
+          onChangeText={onSendMoneyChange}
+        />
+        <FeesAccordion
+          baseCurrency={BASE_CURRENCY}
+          selectedCurrency={selectedCurrency}
+          conversionRate={conversionRate}
+        />
+        <CurrencyInput
+          label="Recipient gets"
+          selectedCurrency={selectedCurrency}
+          currencies={currencies}
+          onSelectCurrency={onCurrencyChange}
+          value={receiptValue}
+          onChangeText={onReceiptMoneyChange}
+        />
+        <ProcessingTime />
+        <Button title="Start transfer" />
+      </SafeAreaView>
+    </ActionSheetProvider>
   );
 }

@@ -1,6 +1,6 @@
+import { useActionSheet } from "@expo/react-native-action-sheet";
 import { AntDesign } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { colors } from "../../theme/colors";
@@ -28,10 +28,17 @@ export function CurrencySelect({
     setCurrencyFlag(flagUri);
   }, [selectedCurrency]);
 
-  const pickerRef = useRef<Picker<string>>();
+  const { showActionSheetWithOptions } = useActionSheet();
 
   function openPicker() {
-    pickerRef.current.focus();
+    showActionSheetWithOptions(
+      {
+        options: currencies,
+      },
+      (buttonIndex) => {
+        onSelectCurrency(currencies[buttonIndex]);
+      }
+    );
   }
 
   return (
@@ -44,7 +51,7 @@ export function CurrencySelect({
           gap: spacing.s,
           margin: -2,
         }}
-        activeOpacity={currencies?.length ? 1 : 0.2}
+        activeOpacity={!currencies?.length ? 1 : 0.2}
         onPress={() => !!currencies?.length && openPicker()}
       >
         <Text style={{ color: colors.white, fontSize: typography.m }}>
@@ -69,27 +76,6 @@ export function CurrencySelect({
           </View>
         </View>
       </TouchableOpacity>
-      {!!currencies?.length && (
-        <Picker
-          style={{
-            position: "absolute",
-            opacity: 0,
-          }}
-          ref={pickerRef}
-          selectedValue={selectedCurrency}
-          onValueChange={(currencySymbol: string) =>
-            onSelectCurrency(currencySymbol)
-          }
-        >
-          {currencies.map((currencySymbol) => (
-            <Picker.Item
-              label={currencySymbol.toUpperCase()}
-              value={currencySymbol.toUpperCase()}
-              key={`currency-picker-${currencySymbol}`}
-            />
-          ))}
-        </Picker>
-      )}
     </>
   );
 }
