@@ -33,9 +33,13 @@ export function FeesAccordion({
         <View style={styles.accordionContainer}>
           <View style={styles.conversionDetails}>
             <Text style={styles.sendCurrencyValue}>1</Text>
-            <Text style={styles.sendCurrencySymbol}>{baseCurrency}</Text>
+            <Text style={styles.sendCurrencySymbol}>
+              {baseCurrency.toUpperCase()}
+            </Text>
             <Text style={styles.equals}>=</Text>
-            <Text style={styles.receiveCurrencyValue}>{selectedCurrency}</Text>
+            <Text style={styles.receiveCurrencyValue}>
+              {selectedCurrency.toUpperCase()}
+            </Text>
             <Text style={styles.receiveCurrencySymbol}>
               {conversionRate.toFixed(2)}
             </Text>
