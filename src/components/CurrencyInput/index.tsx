@@ -1,10 +1,8 @@
 import { TextInput, View } from "react-native";
 
-import { colors } from "../../theme/colors";
-import { spacing } from "../../theme/spacing";
-import { typography } from "../../theme/typography";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { CurrencySelect } from "../CurrencySelect";
+import { styles } from "./styles";
 
 interface Props {
   label: string;
@@ -22,17 +20,9 @@ export function CurrencyInput({
   onSelectCurrency,
   value,
   onChangeText,
-}: Props) {
+}: Readonly<Props>) {
   return (
-    <View
-      style={{
-        backgroundColor: colors.white,
-        borderColor: colors.secondary,
-        borderRadius: spacing.m,
-        borderWidth: 2,
-        flexDirection: "row",
-      }}
-    >
+    <View style={styles.container}>
       <CurrencySelect
         label={label}
         selectedCurrency={selectedCurrency}
@@ -40,7 +30,7 @@ export function CurrencyInput({
         onSelectCurrency={onSelectCurrency}
       />
       <TextInput
-        style={{ flex: 1, padding: spacing.l, fontSize: typography.xxxl }}
+        style={styles.text}
         value={value}
         keyboardType="numeric"
         autoComplete="off"

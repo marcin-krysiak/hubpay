@@ -2,13 +2,13 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Button } from "../../components/Button/Button";
+import { Button } from "../../components/Button";
 import { CurrencyInput } from "../../components/CurrencyInput";
 import { FeesAccordion } from "../../components/FeesAccordion";
 import { ProcessingTime } from "../../components/ProcessingTime";
 import { getCurrencies } from "../../services/api/getCurrencies";
-import { spacing } from "../../theme/spacing";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { styles } from "./styles";
 
 const BASE_CURRENCY = "eur";
 
@@ -19,7 +19,7 @@ export default function Home() {
   );
 
   const [sendValue, setSendValue] = useState("0.00");
-  const [receiptValue, setReceiptValue] = useState("0.00");
+  const [receiveValue, setReceiveValue] = useState("0.00");
 
   const currencies = useMemo(() => Object.keys(currencyRates), [currencyRates]);
   const conversionRate = useMemo(
@@ -36,7 +36,7 @@ export default function Home() {
 
   const onSendMoneyChange = useCallback(
     (sendMoney: string) => {
-      setReceiptValue(formatCurrency(sendMoney, conversionRate));
+      setReceiveValue(formatCurrency(sendMoney, conversionRate));
       setSendValue(sendMoney);
     },
     [conversionRate, selectedCurrency]
@@ -44,7 +44,7 @@ export default function Home() {
 
   const onReceiptMoneyChange = useCallback(
     (receiptMoney: string) => {
-      setReceiptValue(receiptMoney);
+      setReceiveValue(receiptMoney);
       setSendValue(formatCurrency(receiptMoney, 1 / conversionRate));
     },
     [conversionRate, selectedCurrency]
@@ -53,23 +53,14 @@ export default function Home() {
   const onCurrencyChange = useCallback(
     (currency: string) => {
       setSelectedCurrency(currency);
-      setSendValue(formatCurrency(receiptValue, 1 / conversionRate));
+      setSendValue(formatCurrency(receiveValue, 1 / currencyRates[currency]));
     },
-    [conversionRate, selectedCurrency]
+    [conversionRate, currencyRates, receiveValue]
   );
 
   return (
     <ActionSheetProvider>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: "#fff",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: spacing.xl,
-          gap: spacing.m,
-        }}
-      >
+      <SafeAreaView style={styles.container}>
         <CurrencyInput
           label="You send exactly"
           selectedCurrency={BASE_CURRENCY}
@@ -86,7 +77,7 @@ export default function Home() {
           selectedCurrency={selectedCurrency}
           currencies={currencies}
           onSelectCurrency={onCurrencyChange}
-          value={receiptValue}
+          value={receiveValue}
           onChangeText={onReceiptMoneyChange}
         />
         <ProcessingTime />

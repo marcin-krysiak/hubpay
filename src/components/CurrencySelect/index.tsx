@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 import { colors } from "../../theme/colors";
-import { spacing } from "../../theme/spacing";
-import { typography } from "../../theme/typography";
 import { getCurrencyFlag } from "../../utils/getCurrencyFlag";
+import { styles } from "./styles";
 
 interface Props {
   label: string;
@@ -20,7 +19,7 @@ export function CurrencySelect({
   selectedCurrency,
   currencies,
   onSelectCurrency,
-}: Props) {
+}: Readonly<Props>) {
   const [currencyFlag, setCurrencyFlag] = useState("");
 
   useEffect(() => {
@@ -42,40 +41,26 @@ export function CurrencySelect({
   }
 
   return (
-    <>
-      <TouchableOpacity
-        style={{
-          backgroundColor: colors.purple,
-          borderRadius: spacing.m,
-          padding: spacing.l,
-          gap: spacing.s,
-          margin: -2,
-        }}
-        activeOpacity={!currencies?.length ? 1 : 0.2}
-        onPress={() => !!currencies?.length && openPicker()}
-      >
-        <Text style={{ color: colors.white, fontSize: typography.m }}>
-          {label}
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={!currencies?.length ? 1 : 0.2}
+      onPress={() => !!currencies?.length && openPicker()}
+    >
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.dropdownContainer}>
+        {!!currencyFlag && (
+          <Image
+            style={{ width: 30, height: 20 }}
+            source={{ uri: currencyFlag }}
+          />
+        )}
+        <Text style={styles.currencyText}>
+          {selectedCurrency.toUpperCase()}
         </Text>
-        <View
-          style={{ flexDirection: "row", gap: spacing.m, alignItems: "center" }}
-        >
-          {!!currencyFlag && (
-            <Image
-              style={{ width: 30, height: 20 }}
-              source={{ uri: currencyFlag }}
-            />
-          )}
-          <Text style={{ color: colors.white, fontSize: typography.xl }}>
-            {selectedCurrency.toUpperCase()}
-          </Text>
-          <View style={{ width: 12 }}>
-            {!!currencies?.length && (
-              <AntDesign name="down" size={12} color={colors.white} />
-            )}
-          </View>
-        </View>
-      </TouchableOpacity>
-    </>
+        {!!currencies?.length && (
+          <AntDesign name="down" size={12} color={colors.white} />
+        )}
+      </View>
+    </TouchableOpacity>
   );
 }
